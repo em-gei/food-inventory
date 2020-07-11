@@ -8,4 +8,4 @@ cache:
   directories: 
     - $HOME/.m2
 
-script: mvn -f pom.xml clean verify -Pjacoco,mutationCoverage,coveralls
+script: mvn -f pom.xml clean verify -Pjacoco,mutation-testing coveralls:report

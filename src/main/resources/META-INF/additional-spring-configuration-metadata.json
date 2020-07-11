@@ -8,5 +8,15 @@
     "name": "home.message.key",
     "type": "java.lang.String",
     "description": "A description for 'home.message.key'"
+  },
+  {
+    "name": "food.content.key",
+    "type": "java.lang.String",
+    "description": "A description for 'food.content.key'"
+  },
+  {
+    "name": "food.key",
+    "type": "java.lang.String",
+    "description": "A description for 'food.key'"
   }
 ]}

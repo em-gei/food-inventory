@@ -56,6 +56,30 @@ nav ul li.active, nav ul li:hover {
     background-color: transparent;
 }
 
+#foodTable th, td {
+	text-align: center;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.margin-top-20 {
+	margin-top: 20px;
+}
+
+.margin-bottom-20 {
+	margin-bottom: 20px;
+}
+
+.grid-form {
+	display: grid;
+	grid-template-columns: auto;
+	width: 50%;
+	margin: 0 auto;
+    grid-row-gap: 10px;
+}
+
 @media only screen and (max-width: 992px) {
     nav .brand-logo {
         left: 0;

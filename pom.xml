@@ -64,11 +64,6 @@
 			<artifactId>bootstrap</artifactId>
 			<version>3.4.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
-			<version>4.7.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -80,8 +75,8 @@
 					<version>0.8.5</version>
 					<configuration>
 						<excludes>
-							<exclude>**/*Application.java</exclude>
-							<exclude>com/project/foodinventory/models</exclude>
+							<exclude>**/FoodInventoryApplication.*</exclude>
+							<exclude>**/com/project/foodinventory/models/*</exclude>
 						</excludes>
 					</configuration>
 					<executions>

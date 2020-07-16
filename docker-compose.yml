@@ -1,13 +1,15 @@
-version: "2"
+version: "2.1"
 services:
   foodinventory-image:
+    build: .
     image: foodinventory-image
     ports:
       - "8080:8080"
     networks:
       - food-mysql
     depends_on:
-      - mysql1
+      mysql1:
+        condition: service_healthy
  
   mysql1:
     image: mysql:8
@@ -18,6 +20,10 @@ services:
       - MYSQL_DATABASE=db_food
       - MYSQL_USER=springUser
       - MYSQL_PASSWORD=springPwd
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
       
 networks:
   food-mysql:

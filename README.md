@@ -5,7 +5,8 @@ Build Status
 [![Build Status](https://travis-ci.com/em-gei/food-inventory.svg?branch=develop)](https://travis-ci.com/em-gei/food-inventory)
 
 Code Coverage Status
-[![Coverage Status](https://coveralls.io/repos/github/em-gei/food-inventory/badge.svg?branch=feature/improve-travis-configuration)](https://coveralls.io/github/em-gei/food-inventory?branch=feature/improve-travis-configuration)
+[![Coverage Status](https://coveralls.io/repos/github/em-gei/food-inventory/badge.svg?branch=develop)](https://coveralls.io/github/em-gei/food-inventory?branch=develop)
+
 
 This application run on a local mysql database, these are the possible run configurations:
 1) Download and run a local mysql db (NOT RECOMMENDED)

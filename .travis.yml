@@ -12,7 +12,7 @@ install: true
 
 addons:
   sonarcloud:
-    organization: "em-gei-github"
+    organization: "Emgei-github"
   
 cache:
   directories:

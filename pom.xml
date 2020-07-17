@@ -22,6 +22,17 @@
 		<sonar.organization>em-gei</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.login>0203e248bb97dbf29bb760ba6fbd9f0bf01047a6</sonar.login>
+
+		<sonar.issue.ignore.multicriteria>e11, e12</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria.e11.ruleKey>java:S2699</sonar.issue.ignore.multicriteria.e11.ruleKey>
+		<sonar.issue.ignore.multicriteria.e11.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e11.resourceKey>
+		<sonar.issue.ignore.multicriteria.e12.ruleKey>java:S2970</sonar.issue.ignore.multicriteria.e12.ruleKey>
+		<sonar.issue.ignore.multicriteria.e12.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e12.resourceKey>
+
+		<sonar.coverage.exclusions>
+			**/FoodInventoryApplication.*,
+			**/com/project/foodinventory/models/*
+		</sonar.coverage.exclusions>
 	</properties>
 
 	<dependencies>
@@ -186,9 +197,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				</plugin> -->
 		</plugins>
 	</build>
 

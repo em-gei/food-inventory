@@ -2,6 +2,7 @@ package com.project.foodinventory.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +24,7 @@ import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.project.foodinventory.dtos.FoodDTO;
 import com.project.foodinventory.models.Food;
 import com.project.foodinventory.services.FoodService;
 
@@ -95,7 +97,7 @@ public class FoodControllerTest {
 	@Test
 	public void testShouldSaveAndReturnToFoodPage() throws Exception {
 		Mockito.spy(foodService);
-		Food food = new Food(1, "test");
+		FoodDTO food = new FoodDTO(1, "test");
 		
 		ModelAndView modelAndView = mvc.perform(post("/food")
 				.flashAttr("food", food)
@@ -104,13 +106,13 @@ public class FoodControllerTest {
 		.andReturn().getModelAndView();
 		
 		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food");
-		Mockito.verify(foodService).save(food);
+		Mockito.verify(foodService).save(Mockito.any());
 	}
 	
 	@Test
 	public void testShouldDeleteFood() throws Exception {
 		Mockito.spy(foodService);
-		ModelAndView modelAndView = mvc.perform(get("/food/delete/1")).andReturn().getModelAndView();
+		ModelAndView modelAndView = mvc.perform(delete("/food/delete/1")).andReturn().getModelAndView();
 		
 		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food");
 		Mockito.verify(foodService).delete(1);

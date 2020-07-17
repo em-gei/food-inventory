@@ -9,7 +9,7 @@ services:
   
 addons:
   sonarcloud:
-    organization: "em-gei-github"
+    organization: "em-gei"
   
 before_install:
   - docker run --name=mysql-local -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_food -e MYSQL_USER=springUser -e MYSQL_PASSWORD=springPwd --restart on-failure -d mysql/mysql-server:8.0

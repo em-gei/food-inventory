@@ -7,6 +7,9 @@ Build Status
 Code Coverage Status
 [![Coverage Status](https://coveralls.io/repos/github/em-gei/food-inventory/badge.svg?branch=develop)](https://coveralls.io/github/em-gei/food-inventory?branch=develop)
 
+Quality Gate Status
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=em-gei_food-inventory&metric=alert_status)](https://sonarcloud.io/dashboard?id=em-gei_food-inventory)
+
 
 This application run on a local mysql database, these are the possible run configurations:
 1) Download and run a local mysql db (NOT RECOMMENDED)

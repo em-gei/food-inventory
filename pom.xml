@@ -31,7 +31,8 @@
 
 		<sonar.coverage.exclusions>
 			**/FoodInventoryApplication.*,
-			**/com/project/foodinventory/models/*
+			**/com/project/foodinventory/models/*,
+			**/dtos/*
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -99,6 +100,7 @@
 						<excludes>
 							<exclude>**/FoodInventoryApplication.*</exclude>
 							<exclude>**/com/project/foodinventory/models/*</exclude>
+							<exclude>**/dtos/*</exclude>
 						</excludes>
 					</configuration>
 					<executions>

@@ -43,10 +43,10 @@
 					<th>Name</th>
 				</tr>
 				<tr th:each="food : ${foodList}">
-					<td th:text="${food.id}"></td>
+					<td th:id="${food.id}" th:text="${food.id}"></td>
 					<td th:text="${food.name}"></td>
-					<td><a th:href="@{/food/edit/{id}(id=${food.id})}">Edit</a></td>
-					<td><a th:href="@{/food/delete/{id}(id=${food.id})}">Delete</a></td>
+					<td><a th:id="'edit_link_' + ${food.id}" th:href="@{/food/edit/{id}(id=${food.id})}">Edit</a></td>
+					<td><a th:id="'delete_link_' + ${food.id}" th:href="@{/food/delete/{id}(id=${food.id})}">Delete</a></td>
 				</tr>
 			</table>
 		</div>

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,13 +39,14 @@ public class FoodController {
 	
 	@GetMapping("/edit/{id}")
 	public String getFoodEditPage(@PathVariable int id, Model model) {
-		model.addAttribute(foodKey, foodService.findById(id));
+		Food byId = foodService.findById(id);
+		model.addAttribute(foodKey, FoodDTO.dtoFromFood(byId));
 		return "food-edit";
 	}
 	
 	@GetMapping("/new")
 	public String getFoodNewPage(Model model) {
-		model.addAttribute(foodKey, new Food());
+		model.addAttribute(foodKey, new FoodDTO());
 		return "food-edit";
 	}
 	
@@ -56,7 +56,7 @@ public class FoodController {
 		return "redirect:/food";
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	@RequestMapping("/delete/{id}")
 	public String delete(@PathVariable int id) {
 		foodService.delete(id);
 		return "redirect:/food";

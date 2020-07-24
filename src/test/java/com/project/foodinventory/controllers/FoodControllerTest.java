@@ -75,7 +75,7 @@ public class FoodControllerTest {
 	@Test
 	public void testShouldReturnCreateFoodPage() throws Exception {
 		ModelAndView modelAndView = mvc.perform(get("/food/new")).andReturn().getModelAndView();
-		Food food = (Food) modelAndView.getModel().get(foodKey);
+		FoodDTO food = (FoodDTO) modelAndView.getModel().get(foodKey);
 
 		ModelAndViewAssert.assertViewName(modelAndView, "food-edit");
 		assertNotNull(food);
@@ -86,7 +86,7 @@ public class FoodControllerTest {
 		Mockito.when(foodService.findById(1)).thenReturn(new Food(1, "test"));
 
 		ModelAndView modelAndView = mvc.perform(get("/food/edit/1")).andReturn().getModelAndView();
-		Food editingFood = (Food) modelAndView.getModel().get(foodKey);
+		FoodDTO editingFood = (FoodDTO) modelAndView.getModel().get(foodKey);
 
 		ModelAndViewAssert.assertViewName(modelAndView, "food-edit");
 		assertNotNull(editingFood);

@@ -33,17 +33,17 @@
 		</nav>
 	</div>
 
-	<div class="container margin-top-20 margin-bottom-20">
+	<div id="formContainer" class="container margin-top-20 margin-bottom-20">
 
 		<form class="grid-form" action="#" th:action="@{/food}" method="post" th:object="${food}">
 		
 			<label th:if="*{id} != 0">Id</label>
-			<input id="idValue" th:if="*{id} != 0" th:field="*{id}" readonly /> 
+			<input id="idValue" th:if="*{id} != 0" th:field="*{id}" readonly />
 			
 			<label>Name</label>
 			<input id="nameValue" th:field="*{name}" />
 
-			<button class="btn right" type="submit">Save</button>
+			<button class="btn right" name="btn_submit" type="submit">Save</button>
 		</form>
 	</div>
 

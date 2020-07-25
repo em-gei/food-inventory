@@ -4,43 +4,37 @@ import javax.persistence.*;
 
 @Entity
 public class Food {
-	
-	@Id
-	@GeneratedValue
-	private int id;
-	
-	private String name;
-	
-	public Food() {
-		// Empty default constructor for JPA
-	}
 
-	public Food(int id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+    @Id
+    @GeneratedValue
+    private int id;
 
-	public int getId() {
-		return id;
-	}
+    private String name;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Food() {
+        // Empty default constructor for JPA
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Food(int id, String name) {
+        super();
+        this.id = id;
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public int getId() {
+        return id;
+    }
 
-	@Override
-	public String toString() {
-		return "Food [id=" + id + ", name=" + name + "]";
-	}
-	
-	
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

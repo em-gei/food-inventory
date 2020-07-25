@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
@@ -77,7 +78,7 @@ public class FoodControllerIT {
         driver.findElement(By.name("btn_submit")).click();
 
         List<Food> all = foodRepository.findAll();
-        assertTrue(all.size() == 1);
+        assertEquals(1, all.size());
         assertThat(all.get(0).getName()).isEqualTo(foodName);
     }
 

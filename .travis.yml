@@ -8,6 +8,8 @@ addons:
   sonarcloud:
     organization: "em-gei"
 
+services: xvfb
+
 install: true
 
 cache:
@@ -16,4 +18,6 @@ cache:
   - $HOME/.sonar/cache
   
 script:
-  - mvn -f pom.xml clean verify sonar:sonar coveralls:report -Pjacoco,mutation-testing
+  - mvn -f pom.xml clean verify -Pdocker,mutation-testing,jacoco
+  - mvn -f pom.xml verify -Pdocker,e2e-tests
+  - mvn -f pom.xml sonar:sonar coveralls:report

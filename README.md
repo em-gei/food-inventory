@@ -22,3 +22,7 @@ This application run on a local mysql database, these are the possible run confi
     * [Run application docker container]: docker run --network food-mysql --name foodinventory-container -p 8080:8080 -d foodinventory-image
 * Run application and db together with docker compose: 
     * docker-compose up
+    
+    
+Integration and e2e tests need a running mysql database. By mvn can be activated specifying -Pdocker profile.
+To run e2e specify -Pe2e-tests, it's configured to skip unit and integration tests.

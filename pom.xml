@@ -18,8 +18,42 @@
     <properties>
         <java.version>1.8</java.version>
         <application.name>food-inventory</application.name>
+        <skip.unit-tests>false</skip.unit-tests>
+        <skip.integration-tests>false</skip.integration-tests>
         <sonar.projectKey>em-gei_food-inventory</sonar.projectKey>
         <sonar.organization>em-gei</sonar.organization>
+
+        <!-- For SonarCloud -->
+        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <!-- Also collects integration tests -->
+        <sonar.junit.reportPaths>
+            ${project.build.directory}/surefire-reports,
+            ${project.build.directory}/failsafe-reports
+        </sonar.junit.reportPaths>
+        <!-- Also scans HTML files -->
+        <sonar.sources>
+            pom.xml,
+            ${project.build.sourceDirectory},
+            ${basedir}/src/main/resources
+        </sonar.sources>
+        <!-- Manually specify sonar.tests since, if we run sonar:sonar
+          in a separate build, SonarQube can only detect the standard
+          test source folder and not the additional ones configured by
+          build-helper-maven-plugin (src/it/java and src/e2e/java).
+          This way, SonarQube will keep track also of integration and
+          e2e tests. -->
+        <sonar.tests>
+            ${project.build.testSourceDirectory},
+            ${basedir}/src/it/java,
+            ${basedir}/src/e2e/java
+        </sonar.tests>
+        <!-- Exclude non covered files -->
+        <sonar.coverage.exclusions>
+            **/FoodInventoryApplication.*,
+            **/com/project/foodinventory/models/*,
+            **/dtos/*
+        </sonar.coverage.exclusions>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.login>0203e248bb97dbf29bb760ba6fbd9f0bf01047a6</sonar.login>
 
@@ -28,7 +62,8 @@
         <sonar.issue.ignore.multicriteria.e11.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e11.resourceKey>
         <sonar.issue.ignore.multicriteria.e12.ruleKey>java:S2970</sonar.issue.ignore.multicriteria.e12.ruleKey>
         <sonar.issue.ignore.multicriteria.e12.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e12.resourceKey>
-        <sonar.issue.ignore.multicriteria.e13.ruleKey>common-java:DuplicatedBlocks</sonar.issue.ignore.multicriteria.e13.ruleKey>
+        <sonar.issue.ignore.multicriteria.e13.ruleKey>common-java:DuplicatedBlocks
+        </sonar.issue.ignore.multicriteria.e13.ruleKey>
         <sonar.issue.ignore.multicriteria.e13.resourceKey>
             **/com/project/foodinventory/models/*,
             **/com/project/foodinventory/dtos/*
@@ -37,13 +72,6 @@
         <sonar.issue.ignore.multicriteria.e14.resourceKey>
             **/FoodController.java
         </sonar.issue.ignore.multicriteria.e14.resourceKey>
-
-
-        <sonar.coverage.exclusions>
-            **/FoodInventoryApplication.*,
-            **/com/project/foodinventory/models/*,
-            **/dtos/*
-        </sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -108,35 +136,23 @@
             <artifactId>selenium-support</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>3.5.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.5</version>
-                    <configuration>
-                        <excludes>
-                            <exclude>**/FoodInventoryApplication.*</exclude>
-                            <exclude>**/com/project/foodinventory/models/*</exclude>
-                            <exclude>**/dtos/*</exclude>
-                        </excludes>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <!-- binds by default to the phase "initialize" -->
-                                <goal>prepare-agent</goal>
-                                <!-- binds by default to the phase "verify" -->
-                                <goal>report</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
@@ -180,13 +196,14 @@
                 <executions>
                     <execution>
                         <id>add-test-source</id>
-                        <phase>generate-test-sources</phase>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>add-test-source</goal>
                         </goals>
                         <configuration>
                             <sources>
                                 <source>src/it/java</source>
+                                <source>src/e2e/java</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -197,6 +214,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <skipTests>${skip.unit-tests}</skipTests>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
@@ -208,55 +226,15 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
+                        <configuration>
+                            <skipTests>${skip.integration-tests}</skipTests>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                        </configuration>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.33.0</version>
-                <configuration>
-                    <showLogs>true</showLogs>
-                    <images>
-                        <image>
-                            <alias>mysql</alias>
-                            <name>mysql/mysql-server:8.0</name>
-                            <run>
-                                <env>
-                                    <MYSQL_ROOT_PASSWORD>root</MYSQL_ROOT_PASSWORD>
-                                    <MYSQL_DATABASE>db_food</MYSQL_DATABASE>
-                                    <MYSQL_USER>springUser</MYSQL_USER>
-                                    <MYSQL_PASSWORD>springPwd</MYSQL_PASSWORD>
-                                </env>
-                                <ports>
-                                    <port>3306:3306</port>
-                                </ports>
-                                <wait>
-                                    <healthy>true</healthy>
-                                    <time>40000</time>
-                                </wait>
-                            </run>
-                        </image>
-                    </images>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>docker:start</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>docker:stop</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -267,11 +245,45 @@
     <profiles>
         <profile>
             <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.5</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/FoodInventoryApplication.*</exclude>
+                                <exclude>**/com/project/foodinventory/models/*</exclude>
+                                <exclude>**/dtos/*</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <!-- Don't use the default property so that we'll do code coverage only for surefire tests (not for failsafe) -->
+                                    <propertyName>surefireArgLine</propertyName>
+                                </configuration>
+                                <goals>
+                                    <!-- binds by default to the phase "initialize" -->
+                                    <goal>prepare-agent</goal>
+                                    <!-- binds by default to the phase "verify" -->
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <!-- Code coverage for surefire tests -->
+                            <argLine>${surefireArgLine}</argLine>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -302,6 +314,142 @@
             <properties>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
+        </profile>
+
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.33.0</version>
+                        <configuration>
+                            <showLogs>true</showLogs>
+                            <images>
+                                <image>
+                                    <alias>mysql</alias>
+                                    <name>mysql/mysql-server:8.0</name>
+                                    <run>
+                                        <env>
+                                            <MYSQL_ROOT_PASSWORD>root</MYSQL_ROOT_PASSWORD>
+                                            <MYSQL_DATABASE>db_food</MYSQL_DATABASE>
+                                            <MYSQL_USER>springUser</MYSQL_USER>
+                                            <MYSQL_PASSWORD>springPwd</MYSQL_PASSWORD>
+                                        </env>
+                                        <ports>
+                                            <port>3306:3306</port>
+                                        </ports>
+                                        <wait>
+                                            <healthy>true</healthy>
+                                            <time>40000</time>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>docker:start</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>docker:stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>e2e-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skip.unit-tests>true</skip.unit-tests>
+                <skip.integration-tests>true</skip.integration-tests>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Reserve a free random port -->
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>reserve-tomcat-port</id>
+                                <goals>
+                                    <goal>reserve-network-port</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <portNames>
+                                        <!-- Store the random port in ${tomcat.http.port} -->
+                                        <portName>tomcat.http.port</portName>
+                                    </portNames>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <!-- start & stop use the failsafe-plugin phases to run tests as we would expect -->
+                            <execution>
+                                <id>e2e-pre-integration-tests</id>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>
+                                        <!-- property generated by build-helper-maven-plugin -->
+                                        <argument>--server.port=${tomcat.http.port}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>e2e-post-integration-test</id>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>e2e-tests</id>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*E2E.java</include>
+                                    </includes>
+                                </configuration>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <server.port>${tomcat.http.port}</server.port>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

@@ -1,12 +1,13 @@
 language: java
 
-dist: bionic
+dist: xenial
 
 jdk: openjdk8
 
 addons:
   sonarcloud:
     organization: "em-gei"
+  chrome: stable
 
 services:
   - xvfb

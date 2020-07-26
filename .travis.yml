@@ -7,7 +7,9 @@ jdk: openjdk8
 addons:
   sonarcloud:
     organization: "em-gei"
-  chrome: stable
+  apt:
+    packages:
+      - google-chrome-stable
 
 services:
   - xvfb

@@ -144,9 +144,10 @@
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>3.5.0</version>
+            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
 
     </dependencies>
 

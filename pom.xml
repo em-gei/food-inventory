@@ -259,6 +259,7 @@
                                 <exclude>**/FoodInventoryApplication.*</exclude>
                                 <exclude>**/com/project/foodinventory/models/*</exclude>
                                 <exclude>**/dtos/*</exclude>
+                                <exclude>**com.gargoylesoftware*</exclude>
                             </excludes>
                         </configuration>
                         <executions>

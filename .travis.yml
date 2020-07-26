@@ -18,6 +18,9 @@ cache:
     - $HOME/.m2
     - $HOME/.sonar/cache
 
+before_script:
+  - chromedriver-update 84.0.4147.30
+
 script:
   - mvn -f pom.xml clean verify -Pdocker,mutation-testing,jacoco
   - mvn -f pom.xml verify -Pdocker,e2e-tests

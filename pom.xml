@@ -75,8 +75,7 @@
         </sonar.issue.ignore.multicriteria.e14.resourceKey>
         <sonar.issue.ignore.multicriteria.e15.ruleKey>Web:S1827</sonar.issue.ignore.multicriteria.e15.ruleKey>
         <sonar.issue.ignore.multicriteria.e15.resourceKey>
-            **/food.html,
-            **/food-edit.html
+            **/templates/*
         </sonar.issue.ignore.multicriteria.e15.resourceKey>
 
     </properties>

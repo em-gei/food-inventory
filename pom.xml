@@ -43,7 +43,7 @@
           build-helper-maven-plugin (src/it/java and src/e2e/java).
           This way, SonarQube will keep track also of integration and
           e2e tests. -->
-        <sonar.exclusions>${basedir}/src/main/resources/static/vendor</sonar.exclusions>
+        <sonar.exclusions>**/vendor/**/*, **/vendor/materialize/**/*</sonar.exclusions>
         <sonar.tests>
             ${project.build.testSourceDirectory},
             ${basedir}/src/it/java,

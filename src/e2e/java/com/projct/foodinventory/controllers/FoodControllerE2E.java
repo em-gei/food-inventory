@@ -90,12 +90,12 @@ public class FoodControllerE2E {
     }
 
     @Test
-    public void testDeleteCreatedFood() throws Exception {
+    public void testDeleteCreatedFood() {
         driver.get(baseUrl);
         // add food using the "Create food" link
         driver.findElement(By.cssSelector("a[href*='/new")).click();
         // Await page to load
-        Thread.sleep(500);
+        _wait.until(d -> d.findElement(By.id("formContainer")));
 
         WebElement formContainer = driver.findElement(By.id("formContainer"));
         // Save new food with timestamp as name
@@ -104,16 +104,15 @@ public class FoodControllerE2E {
         driver.findElement(By.name("btn_submit")).click();
 
         // Await page to load
-        Thread.sleep(500);
+        _wait.until(d -> d.findElement(By.id("foodTable")));
         // Retrieve created food specific delete link
         WebElement foodTable = driver.findElement(By.id("foodTable"));
         foodTable.findElement(By.name(String.valueOf(timestamp))).findElement(By.name("delete_link")).click();
 
-        // Await page to refresh
-        Thread.sleep(500);
-
         // Check that food is not present anymore
         try {
+            // Await page to refresh
+            _wait.until(d -> d.findElement(By.name(String.valueOf(timestamp))));
             foodTable.findElement(By.name(String.valueOf(timestamp)));
             Assert.fail();
         } catch (Exception e) {

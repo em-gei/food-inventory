@@ -303,7 +303,7 @@
                                 <goals>
                                     <goal>mutationCoverage</goal>
                                 </goals>
-                                <phase>pre-integration-test</phase>
+                                <phase>integration-test</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -353,7 +353,7 @@
                         <executions>
                             <execution>
                                 <id>docker:start</id>
-                                <phase>package</phase>
+                                <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>start</goal>
                                 </goals>
@@ -409,6 +409,7 @@
                             <!-- start & stop use the failsafe-plugin phases to run tests as we would expect -->
                             <execution>
                                 <id>e2e-pre-integration-tests</id>
+                                <phase>integration-test</phase>
                                 <goals>
                                     <goal>start</goal>
                                 </goals>

@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ public class FoodControllerE2E {
     private static String baseUrl = "http://localhost:" + port + "/food";
     private WebDriver driver;
     private long timestamp;
+    private WebDriverWait _wait;
 
     @BeforeClass
     public static void setupClass() {
@@ -28,6 +30,7 @@ public class FoodControllerE2E {
     public void setup() {
         driver = new ChromeDriver();
         timestamp = new Date().getTime();
+        _wait = new WebDriverWait(driver, 10);
     }
 
     @After
@@ -36,13 +39,13 @@ public class FoodControllerE2E {
     }
 
     @Test
-    public void testCreateNewFood() throws Exception {
+    public void testCreateNewFood() {
         driver.get(baseUrl);
         // add a user using the "Create food" link
         driver.findElement(By.cssSelector("a[href*='/new")).click();
         // Await page to load
-        Thread.sleep(500);
-
+        WebDriverWait _wait = new WebDriverWait(driver, 3);
+        _wait.until(d -> d.findElement(By.id("formContainer")));
         WebElement formContainer = driver.findElement(By.id("formContainer"));
 
         formContainer.findElement(By.name("name")).sendKeys(String.valueOf(timestamp));
@@ -54,13 +57,12 @@ public class FoodControllerE2E {
     }
 
     @Test
-    public void testEditExistingFood() throws Exception {
+    public void testEditExistingFood() {
         driver.get(baseUrl);
         // add a user using the "Create food" link
         driver.findElement(By.cssSelector("a[href*='/new")).click();
         // Await page to load
-        Thread.sleep(500);
-
+        _wait.until(d -> d.findElement(By.id("formContainer")));
         WebElement formContainer = driver.findElement(By.id("formContainer"));
 
         formContainer.findElement(By.name("name")).sendKeys(String.valueOf(timestamp));
@@ -68,20 +70,21 @@ public class FoodControllerE2E {
         driver.findElement(By.name("btn_submit")).click();
 
         // Await page to load
-        Thread.sleep(500);
+        _wait.until(d -> d.findElement(By.id("foodTable")));
         // Retrieve created food specific delete link
         WebElement foodTable = driver.findElement(By.id("foodTable"));
         foodTable.findElement(By.name(String.valueOf(timestamp))).findElement(By.name("edit_link")).click();
 
         // Await page to refresh
-        Thread.sleep(500);
+        _wait.until(d -> d.findElement(By.id("formContainer")));
 
         driver.findElement(By.id("formContainer")).findElement(By.name("name")).sendKeys("_edited");
         // press Save
         driver.findElement(By.name("btn_submit")).click();
 
         // Await page to load
-        Thread.sleep(500);
+        _wait.until(d -> d.findElement(By.id("foodTable")));
+
         // Retrieve edited food
         driver.findElement(By.id("foodTable")).findElement(By.name(timestamp + "_edited"));
     }

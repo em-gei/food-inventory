@@ -34,9 +34,4 @@ public class FoodDTO {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "FoodDTO [id=" + id + ", name=" + name + "]";
-    }
-
 }

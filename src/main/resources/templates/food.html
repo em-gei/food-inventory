@@ -19,8 +19,8 @@
 		<nav>
 			<div class="container">
 				<a th:href="@{/}" class="brand-logo">Food Inventory</a> <a href="#"
-					data-activates="mobile-nav" class="button-collapse right"><i
-					class="material-icons">menu</i></a>
+					data-activates="mobile-nav" class="button-collapse right"><em
+					class="material-icons">menu</em></a>
 				<ul class="right hide-on-med-and-down">
 					<li><a th:href="@{/}">Home</a></li>
 					<li class="active"><a th:href="@{/food}">Food</a></li>
@@ -37,16 +37,16 @@
 		<div class="row">
 			<h3 th:if="${foodList.isEmpty()}" class="align-center">NO FOOD
 				AVAILABLE</h3>
-			<table id="foodTable" th:if="${!foodList.isEmpty()}">
+			<table id="foodTable" aria-describedby="foodTable" th:if="${!foodList.isEmpty()}">
 				<tr>
-					<th>Id</th>
-					<th>Name</th>
+					<th scope="col">Id</th>
+					<th scope="col">Name</th>
 				</tr>
-				<tr th:each="food : ${foodList}">
+				<tr th:id="${food.id}" th:name="${food.name}"  th:each="food : ${foodList}">
 					<td th:id="${food.id}" th:text="${food.id}"></td>
 					<td th:text="${food.name}"></td>
-					<td><a th:id="'edit_link_' + ${food.id}" th:href="@{/food/edit/{id}(id=${food.id})}">Edit</a></td>
-					<td><a th:id="'delete_link_' + ${food.id}" th:href="@{/food/delete/{id}(id=${food.id})}">Delete</a></td>
+					<td><a th:id="'edit_link_' + ${food.id}" name="edit_link" th:href="@{/food/edit/{id}(id=${food.id})}">Edit</a></td>
+					<td><a th:id="'delete_link_' + ${food.id}" name ="delete_link" th:href="@{/food/delete/{id}(id=${food.id})}">Delete</a></td>
 				</tr>
 			</table>
 		</div>

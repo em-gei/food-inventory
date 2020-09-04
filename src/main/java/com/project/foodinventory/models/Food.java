@@ -40,12 +40,4 @@ public class Food {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<FoodMeal> getMealList() {
-        return mealList;
-    }
-
-    public void setMealList(List<FoodMeal> mealList) {
-        this.mealList = mealList;
-    }
 }

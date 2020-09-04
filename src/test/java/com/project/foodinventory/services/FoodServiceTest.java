@@ -54,7 +54,7 @@ public class FoodServiceTest {
 	@Test
 	public void testFindByIdExistingItem() {
 		Food food = new Food(1, "test");
-		Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(Optional.of(food));
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(food));
 		
 		Food findById = foodService.findById(1);
 		
@@ -65,7 +65,7 @@ public class FoodServiceTest {
 	
 	@Test
 	public void testFindByIdWhenFoodNotExist() {
-		Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 		
 		Food findById = foodService.findById(1);
 		
@@ -86,15 +86,15 @@ public class FoodServiceTest {
 	public void testDeleteExistingFood() {
 		Food food = new Food(1, "test");
 		Mockito.spy(repository);
-		Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(Optional.of(food));
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(food));
 		
-		assertTrue(foodService.delete(1));
-		Mockito.verify(repository).deleteById(1);
+		assertTrue(foodService.delete(food.getId()));
+		Mockito.verify(repository).deleteById(food.getId());
 	}
-	
+
 	@Test
 	public void testDeleteFoodThatNotExists() {
-		Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 		
 		assertFalse(foodService.delete(1));
 	}

@@ -24,7 +24,6 @@ import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.project.foodinventory.dtos.FoodDTO;
 import com.project.foodinventory.models.Food;
 import com.project.foodinventory.services.FoodService;
 
@@ -75,7 +74,7 @@ public class FoodControllerTest {
 	@Test
 	public void testShouldReturnCreateFoodPage() throws Exception {
 		ModelAndView modelAndView = mvc.perform(get("/food/new")).andReturn().getModelAndView();
-		FoodDTO food = (FoodDTO) modelAndView.getModel().get(foodKey);
+		Food food = (Food) modelAndView.getModel().get(foodKey);
 
 		ModelAndViewAssert.assertViewName(modelAndView, "food-edit");
 		assertNotNull(food);
@@ -86,7 +85,7 @@ public class FoodControllerTest {
 		Mockito.when(foodService.findById(1)).thenReturn(new Food(1, "test"));
 
 		ModelAndView modelAndView = mvc.perform(get("/food/edit/1")).andReturn().getModelAndView();
-		FoodDTO editingFood = (FoodDTO) modelAndView.getModel().get(foodKey);
+		Food editingFood = (Food) modelAndView.getModel().get(foodKey);
 
 		ModelAndViewAssert.assertViewName(modelAndView, "food-edit");
 		assertNotNull(editingFood);
@@ -95,16 +94,32 @@ public class FoodControllerTest {
 	}
 
 	@Test
-	public void testShouldSaveAndReturnToFoodPage() throws Exception {
+	public void testFoodSaveWithoutNameDoNothing() throws Exception {
 		Mockito.spy(foodService);
-		FoodDTO food = new FoodDTO(1, "test");
-		
+		Food food = new Food();
+
 		ModelAndView modelAndView = mvc.perform(post("/food")
 				.flashAttr("food", food)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
-		.andReturn().getModelAndView();
-		
+				.andReturn().getModelAndView();
+
+		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food/new");
+		Mockito.verify(foodService, Mockito.never()).save(Mockito.any());
+	}
+
+	@Test
+	public void testShouldSaveAndReturnToFoodPage() throws Exception {
+		Mockito.spy(foodService);
+		Food food = new Food();
+		food.setName("test");
+
+		ModelAndView modelAndView = mvc.perform(post("/food")
+				.flashAttr("food", food)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andReturn().getModelAndView();
+
 		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food");
 		Mockito.verify(foodService).save(Mockito.any());
 	}

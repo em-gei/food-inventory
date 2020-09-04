@@ -1,0 +1,96 @@
+package com.project.foodinventory.services;
+
+import com.project.foodinventory.models.Meal;
+import com.project.foodinventory.repositories.MealRepository;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+
+@RunWith(MockitoJUnitRunner.class)
+public class MealServiceTest {
+
+    @Mock
+    private MealRepository repository;
+
+    @InjectMocks
+    private MealService mealService;
+
+    @Test
+    public void testFindAllWithNoResults() {
+        Mockito.when(repository.findAll()).thenReturn(Collections.emptyList());
+        List<Meal> findAll = mealService.findAll();
+        assertTrue(findAll.isEmpty());
+    }
+
+    @Test
+    public void testFindAllWithResults() {
+        Meal meal1 = new Meal(1, "test1");
+        Meal meal2 = new Meal(2, "test2");
+        Mockito.when(repository.findAll()).thenReturn(Arrays.asList(meal1, meal2));
+
+        List<Meal> findAll = mealService.findAll();
+
+        assertEquals(2, findAll.size());
+        assertThat(findAll.contains(meal1));
+        assertThat(findAll.contains(meal2));
+    }
+
+    @Test
+    public void testFindByIdExistingItem() {
+        Meal meal = new Meal(1, "test");
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(meal));
+
+        Meal findById = mealService.findById(1);
+
+        assertNotNull(findById);
+        assertEquals(meal.getId(), findById.getId());
+        assertEquals(meal.getDescription(), findById.getDescription());
+    }
+
+    @Test
+    public void testFindByIdWhenMealNotExist() {
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        Meal findById = mealService.findById(1);
+
+        assertNull(findById);
+    }
+
+    @Test
+    public void testSaveMeal() {
+        Meal meal = new Meal(1, "test");
+        Mockito.when(repository.save(Mockito.any(Meal.class))).thenReturn(meal);
+
+        Meal saved = mealService.save(meal);
+
+        assertEquals(meal, saved);
+    }
+
+    @Test
+    public void testDeleteExistingMeal() {
+        Meal food = new Meal(1, "test");
+        Mockito.spy(repository);
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(food));
+
+        assertTrue(mealService.delete(1));
+        Mockito.verify(repository).deleteById(Long.valueOf(1));
+    }
+
+    @Test
+    public void testDeleteMealThatNotExists() {
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        assertFalse(mealService.delete(1));
+    }
+}

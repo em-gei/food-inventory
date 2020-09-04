@@ -56,7 +56,7 @@ nav ul li.active, nav ul li:hover {
     background-color: transparent;
 }
 
-#foodTable th, td {
+#containerTable th, td {
 	text-align: center;
 }
 

@@ -23,7 +23,7 @@ public class Meal {
     public Meal(long id, String description) {
         this.id = id;
         this.description = description;
-        foodList = new ArrayList();
+        foodList = new ArrayList<FoodMeal>();
     }
 
     public long getId() {

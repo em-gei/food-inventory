@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" th:href="@{/favicon.png}" />
+
+    <link rel="stylesheet"
+          th:href="@{/vendor/materialize/css/materialize.css}" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+
+    <title>Food Inventory</title>
+</head>
+<body>
+<div class="navbar-fixed">
+    <nav>
+        <div class="container">
+            <a th:href="@{/}" class="brand-logo">Food Inventory</a>
+            <a href="#" data-activates="mobile-nav" class="button-collapse right">
+                <em class="material-icons">menu</em>
+            </a>
+            <ul class="right hide-on-med-and-down">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/food}">Food</a></li>
+                <li class="active"><a th:href="@{/meal}">Meal</a></li>
+            </ul>
+            <ul id="mobile-nav" class="side-nav">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/food}">Food</a></li>
+                <li class="active"><a th:href="@{/meal}">Meal</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <div class="row">
+        <h3 th:if="${mealList.isEmpty()}" class="align-center">NO MEALS AVAILABLE</h3>
+        <table id="containerTable" aria-describedby="mealTable" th:if="${!mealList.isEmpty()}">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Description</th>
+            </tr>
+            <tr th:id="${meal.id}" th:name="${meal.description}"  th:each="meal : ${mealList}">
+                <td th:id="${meal.id}" th:text="${meal.id}"></td>
+                <td th:text="${meal.description}"></td>
+                <td><a th:id="'edit_link_' + ${meal.id}" name="edit_link" th:href="@{/meal/edit/{id}(id=${meal.id})}">Edit</a></td>
+                <td><a th:id="'meal_link_' + ${meal.id}" name="meal_link" th:href="@{/meal/link/{id}(id=${meal.id})}">Link</a></td>
+                <td><a th:id="'delete_link_' + ${meal.id}" name ="delete_link" th:href="@{/meal/delete/{id}(id=${meal.id})}">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+    <a class="btn right" th:href="@{/meal/new}">Create new meal</a>
+</div>
+
+
+<script th:src="@{/vendor/jquery/jquery-1.11.3.js}"></script>
+<script th:src="@{/vendor/materialize/js/materialize.js}"></script>
+<script th:src="@{/app.js}"></script>
+
+</body>
+</html>

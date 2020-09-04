@@ -18,7 +18,7 @@ public class FoodService {
 		return foodRepository.findAll();
 	}
 
-	public Food findById(int id) {
+	public Food findById(long id) {
 		return foodRepository.findById(id).orElse(null);
 	}
 
@@ -26,7 +26,7 @@ public class FoodService {
 		return foodRepository.save(newFood);
 	}
 
-	public boolean delete(int id) {
+	public boolean delete(long id) {
 		Food findById = findById(id);
 		if (findById == null) {
 			return false;

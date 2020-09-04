@@ -41,7 +41,7 @@ public class FoodControllerE2E {
     @Test
     public void testCreateNewFood() {
         driver.get(baseUrl);
-        // add a user using the "Create food" link
+        // add a food using the "Create food" link
         driver.findElement(By.cssSelector("a[href*='/new")).click();
         // Await page to load
         WebDriverWait _wait = new WebDriverWait(driver, 3);
@@ -53,13 +53,13 @@ public class FoodControllerE2E {
         driver.findElement(By.name("btn_submit")).click();
 
         // we are redirected to the food list page the table shows the created food
-        assertThat(driver.findElement(By.id("foodTable")).getText()).contains(String.valueOf(timestamp));
+        assertThat(driver.findElement(By.id("containerTable")).getText()).contains(String.valueOf(timestamp));
     }
 
     @Test
     public void testEditExistingFood() {
         driver.get(baseUrl);
-        // add a user using the "Create food" link
+        // add a food using the "Create food" link
         driver.findElement(By.cssSelector("a[href*='/new")).click();
         // Await page to load
         _wait.until(d -> d.findElement(By.id("formContainer")));
@@ -70,10 +70,10 @@ public class FoodControllerE2E {
         driver.findElement(By.name("btn_submit")).click();
 
         // Await page to load
-        _wait.until(d -> d.findElement(By.id("foodTable")));
+        _wait.until(d -> d.findElement(By.id("containerTable")));
         // Retrieve created food specific delete link
-        WebElement foodTable = driver.findElement(By.id("foodTable"));
-        foodTable.findElement(By.name(String.valueOf(timestamp))).findElement(By.name("edit_link")).click();
+        WebElement containerTable = driver.findElement(By.id("containerTable"));
+        containerTable.findElement(By.name(String.valueOf(timestamp))).findElement(By.name("edit_link")).click();
 
         // Await page to refresh
         _wait.until(d -> d.findElement(By.id("formContainer")));
@@ -83,10 +83,10 @@ public class FoodControllerE2E {
         driver.findElement(By.name("btn_submit")).click();
 
         // Await page to load
-        _wait.until(d -> d.findElement(By.id("foodTable")));
+        _wait.until(d -> d.findElement(By.id("containerTable")));
 
         // Retrieve edited food
-        driver.findElement(By.id("foodTable")).findElement(By.name(timestamp + "_edited"));
+        driver.findElement(By.id("containerTable")).findElement(By.name(timestamp + "_edited"));
     }
 
     @Test
@@ -104,16 +104,16 @@ public class FoodControllerE2E {
         driver.findElement(By.name("btn_submit")).click();
 
         // Await page to load
-        _wait.until(d -> d.findElement(By.id("foodTable")));
+        _wait.until(d -> d.findElement(By.id("containerTable")));
         // Retrieve created food specific delete link
-        WebElement foodTable = driver.findElement(By.id("foodTable"));
-        foodTable.findElement(By.name(String.valueOf(timestamp))).findElement(By.name("delete_link")).click();
+        WebElement containerTable = driver.findElement(By.id("containerTable"));
+        containerTable.findElement(By.name(String.valueOf(timestamp))).findElement(By.name("delete_link")).click();
 
         // Check that food is not present anymore
         try {
             // Await page to refresh
             _wait.until(d -> d.findElement(By.name(String.valueOf(timestamp))));
-            foodTable.findElement(By.name(String.valueOf(timestamp)));
+            containerTable.findElement(By.name(String.valueOf(timestamp)));
             Assert.fail();
         } catch (Exception e) {
             // Food succesfully deleted

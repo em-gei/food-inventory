@@ -18,16 +18,19 @@
 	<div class="navbar-fixed">
 		<nav>
 			<div class="container">
-				<a th:href="@{/}" class="brand-logo">Food Inventory</a> <a href="#"
+				<a th:href="@{/}" class="brand-logo">Food Inventory</a>
+				<a href="#"
 					data-activates="mobile-nav" class="button-collapse right"><em
 					class="material-icons">menu</em></a>
 				<ul class="right hide-on-med-and-down">
 					<li><a th:href="@{/}">Home</a></li>
 					<li class="active"><a th:href="@{/food}">Food</a></li>
+					<li><a th:href="@{/meal}">Meal</a></li>
 				</ul>
 				<ul id="mobile-nav" class="side-nav">
 					<li><a th:href="@{/}">Home</a></li>
 					<li class="active"><a th:href="@{/food}">Food</a></li>
+					<li><a th:href="@{/meal}">Meal</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -36,7 +39,6 @@
 	<div id="formContainer" class="container margin-top-20 margin-bottom-20">
 
 		<form class="grid-form" action="#" th:action="@{/food}" method="post" th:object="${food}">
-		
 			<label th:if="*{id} != 0">Id</label>
 			<input id="idValue" th:if="*{id} != 0" th:field="*{id}" readonly />
 			

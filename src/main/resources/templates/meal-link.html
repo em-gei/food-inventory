@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" th:href="@{/favicon.png}"/>
+
+    <link rel="stylesheet"
+          th:href="@{/vendor/materialize/css/materialize.css}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+
+    <title>Food Inventory</title>
+</head>
+<body>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="container">
+                <a th:href="@{/}" class="brand-logo">Food Inventory</a>
+                <a href="#" data-activates="mobile-nav" class="button-collapse right">
+                    <em class="material-icons">menu</em>
+                </a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a th:href="@{/}">Home</a></li>
+                    <li><a th:href="@{/food}">Food</a></li>
+                    <li class="active"><a th:href="@{/meal}">Meal</a></li>
+                </ul>
+                <ul id="mobile-nav" class="side-nav">
+                    <li><a th:href="@{/}">Home</a></li>
+                    <li><a th:href="@{/food}">Food</a></li>
+                    <li class="active"><a th:href="@{/meal}">Meal</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div id="formContainer" class="container margin-top-20 margin-bottom-20">
+        <form class="grid-form" action="#" th:action="@{/meal/{mealId}/add/food (mealId = ${mealDTO.meal.id})}" method="post" th:object="${mealDTO}">
+
+            <label th:if="*{meal.id} != 0" th:text="'Meal: ' + *{meal.description}"></label>
+            <input id="idValue"th:field="*{meal.id}" hidden />
+
+            <label>Food to Add</label>
+            <select id = "foodSelectList" th:field="*{foodToAdd.id}" style="display: block">
+                <option th:each="food : ${mealDTO.allFoods}" th:value="${food.id}" th:text="${food.name}">
+                </option>
+            </select>
+
+            <button type="submit" name="btn_submit" class="btn right" th:disabled="${mealDTO.allFoods.isEmpty()}">LINK</button>
+
+            <label>Food List</label>
+            <table id="containerTable" aria-describedby="foodMealTable" th:field="*{meal.foodList}">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col"></th>
+                </tr>
+                <tr th:if="*{meal.foodList.isEmpty()}"><td colspan="2">No food</td></tr>
+                <tr th:id="${foodMeal.food.id}" th:name="${foodMeal.food.name}" th:each="foodMeal : *{meal.foodList}">
+                    <td th:id="${foodMeal.food.id}" th:text="${foodMeal.food.name}"></td>
+                    <td><a th:id="'delete_link_' + ${foodMeal.food.id}" name="delete_link"
+                           th:href="@{/meal/remove/foodMeal/{foodMealId} (foodMealId = ${foodMeal.id})}">Remove</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script th:src="@{/vendor/jquery/jquery-1.11.3.js}"></script>
+    <script th:src="@{/vendor/materialize/js/materialize.js}"></script>
+    <script th:src="@{/app.js}"></script>
+</body>
+</html>

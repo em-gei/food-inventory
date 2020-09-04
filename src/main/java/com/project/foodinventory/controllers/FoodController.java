@@ -12,54 +12,63 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.project.foodinventory.dtos.FoodDTO;
 import com.project.foodinventory.models.Food;
 import com.project.foodinventory.services.FoodService;
 
 @Controller
 @RequestMapping("/food")
 public class FoodController {
-	
-	@Value("${food.content.key}")
-	private String foodContentKey;
-	
-	@Value("${food.key}")
-	private String foodKey;
-	
-	@Autowired
-	FoodService foodService;
 
-	
-	@GetMapping
-	public String getFoodPage(Model model) {
-		List<Food> foodList = foodService.findAll();
-		model.addAttribute(foodContentKey, foodList);
-		return "food";
-	}
-	
-	@GetMapping("/edit/{id}")
-	public String getFoodEditPage(@PathVariable int id, Model model) {
-		Food byId = foodService.findById(id);
-		model.addAttribute(foodKey, FoodDTO.dtoFromFood(byId));
-		return "food-edit";
-	}
-	
-	@GetMapping("/new")
-	public String getFoodNewPage(Model model) {
-		model.addAttribute(foodKey, new FoodDTO());
-		return "food-edit";
-	}
-	
-	@PostMapping
-	public String save(@ModelAttribute("food") FoodDTO newFood) {
-		foodService.save(new Food(newFood.getId(), newFood.getName()));
-		return "redirect:/food";
-	}
-	
-	@RequestMapping("/delete/{id}")
-	public String delete(@PathVariable int id) {
-		foodService.delete(id);
-		return "redirect:/food";
-	}
+    @Value("${food.content.key}")
+    private String foodContentKey;
+
+    @Value("${food.key}")
+    private String foodKey;
+
+    @Autowired
+    FoodService foodService;
+
+
+    @GetMapping
+    public String getFoodPage(Model model) {
+        List<Food> foodList = foodService.findAll();
+        model.addAttribute(foodContentKey, foodList);
+        return "food";
+    }
+
+    @GetMapping("/new")
+    public String getFoodNewPage(Model model) {
+        model.addAttribute(foodKey, new Food());
+        return "food-edit";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String getFoodEditPage(@PathVariable int id, Model model) {
+        Food food = foodService.findById(id);
+        model.addAttribute(foodKey, food);
+        return "food-edit";
+    }
+
+    @PostMapping
+    public String save(@ModelAttribute("food") Food newFood) {
+        String name = newFood.getName();
+        if (name == null || name.isEmpty()) {
+            return "redirect:/food/new";
+        } else {
+            Food food = foodService.findById(newFood.getId());
+            if (food == null) {
+                food = new Food();
+            }
+            food.setName(name);
+            foodService.save(food);
+            return "redirect:/food";
+        }
+    }
+
+    @RequestMapping("/delete/{id}")
+    public String delete(@PathVariable int id) {
+        foodService.delete(id);
+        return "redirect:/food";
+    }
 
 }

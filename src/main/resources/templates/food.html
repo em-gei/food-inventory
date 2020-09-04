@@ -18,16 +18,19 @@
 	<div class="navbar-fixed">
 		<nav>
 			<div class="container">
-				<a th:href="@{/}" class="brand-logo">Food Inventory</a> <a href="#"
+				<a th:href="@{/}" class="brand-logo">Food Inventory</a>
+				<a href="#"
 					data-activates="mobile-nav" class="button-collapse right"><em
 					class="material-icons">menu</em></a>
 				<ul class="right hide-on-med-and-down">
 					<li><a th:href="@{/}">Home</a></li>
 					<li class="active"><a th:href="@{/food}">Food</a></li>
+					<li><a th:href="@{/meal}">Meal</a></li>
 				</ul>
 				<ul id="mobile-nav" class="side-nav">
 					<li><a th:href="@{/}">Home</a></li>
 					<li class="active"><a th:href="@{/food}">Food</a></li>
+					<li><a th:href="@{/meal}">Meal</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -37,7 +40,7 @@
 		<div class="row">
 			<h3 th:if="${foodList.isEmpty()}" class="align-center">NO FOOD
 				AVAILABLE</h3>
-			<table id="foodTable" aria-describedby="foodTable" th:if="${!foodList.isEmpty()}">
+			<table id="containerTable" aria-describedby="foodTable" th:if="${!foodList.isEmpty()}">
 				<tr>
 					<th scope="col">Id</th>
 					<th scope="col">Name</th>

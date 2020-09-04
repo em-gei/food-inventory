@@ -13,7 +13,7 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String index(Model model) {
-		model.addAttribute("homeMessage", "Food Inventory Web Application");
+		model.addAttribute(homeMessageKey, "Food Inventory Web Application");
 		return "index";
 	}
 }

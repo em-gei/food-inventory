@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/meal")
 public class MealController {
 
+    public static final String REDIRECT_MEAL = "redirect:/meal";
     @Autowired
     MealService mealService;
 
@@ -69,14 +70,14 @@ public class MealController {
             }
             meal.setDescription(description);
             mealService.save(meal);
-            return "redirect:/meal";
+            return REDIRECT_MEAL;
         }
     }
 
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable long id) {
         mealService.delete(id);
-        return "redirect:/meal";
+        return REDIRECT_MEAL;
     }
 
     @GetMapping("/link/{id}")
@@ -92,7 +93,7 @@ public class MealController {
     @RequestMapping("/remove/foodMeal/{foodMealId}")
     public String removeLinkedFood(@PathVariable Long foodMealId) {
         foodMealService.delete(foodMealId);
-        return "redirect:/meal";
+        return REDIRECT_MEAL;
     }
 
     @PostMapping("/{mealId}/add/food")
@@ -104,6 +105,6 @@ public class MealController {
             foodMeal.setMeal(meal);
             foodMealService.save(foodMeal);
         }
-        return "redirect:/meal";
+        return REDIRECT_MEAL;
     }
 }

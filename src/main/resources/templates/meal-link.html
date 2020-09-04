@@ -54,7 +54,7 @@
             <table id="containerTable" aria-describedby="foodMealTable" th:field="*{meal.foodList}">
                 <tr>
                     <th scope="col">Name</th>
-                    <th></th>
+                    <th scope="col"></th>
                 </tr>
                 <tr th:if="*{meal.foodList.isEmpty()}"><td colspan="2">No food</td></tr>
                 <tr th:id="${foodMeal.food.id}" th:name="${foodMeal.food.name}" th:each="foodMeal : *{meal.foodList}">

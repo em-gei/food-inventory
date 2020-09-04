@@ -58,7 +58,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.login>0203e248bb97dbf29bb760ba6fbd9f0bf01047a6</sonar.login>
 
-        <sonar.issue.ignore.multicriteria>e11, e12, e13, e14, e15</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria>e11, e12, e13, e14, e15, e16, e17</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e11.ruleKey>java:S2699</sonar.issue.ignore.multicriteria.e11.ruleKey>
         <sonar.issue.ignore.multicriteria.e11.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e11.resourceKey>
         <sonar.issue.ignore.multicriteria.e12.ruleKey>java:S2970</sonar.issue.ignore.multicriteria.e12.ruleKey>
@@ -77,7 +77,10 @@
         <sonar.issue.ignore.multicriteria.e15.resourceKey>
             **/templates/*
         </sonar.issue.ignore.multicriteria.e15.resourceKey>
-
+        <sonar.issue.ignore.multicriteria.e16.ruleKey>java:S4684</sonar.issue.ignore.multicriteria.e16.ruleKey>
+        <sonar.issue.ignore.multicriteria.e16.resourceKey>**/controllers/*</sonar.issue.ignore.multicriteria.e16.resourceKey>
+        <sonar.issue.ignore.multicriteria.e17.ruleKey>java:S3752</sonar.issue.ignore.multicriteria.e17.ruleKey>
+        <sonar.issue.ignore.multicriteria.e17.resourceKey>**/controllers/*</sonar.issue.ignore.multicriteria.e17.resourceKey>
     </properties>
 
     <dependencies>

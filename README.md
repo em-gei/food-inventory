@@ -1,5 +1,5 @@
 # food-inventory
-This is the final project for ATTSW exam.
+This is the final project for ATTSW exam. 
 
 Build Status
 [![Build Status](https://travis-ci.com/em-gei/food-inventory.svg?branch=develop)](https://travis-ci.com/em-gei/food-inventory)

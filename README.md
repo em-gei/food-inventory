@@ -13,7 +13,7 @@ Quality Gate Status
 
 This application run on a local mysql database, these are the possible run configurations:
 * Download and run a local mysql db (NOT RECOMMENDED)
-    * Run a mysql db in a docker container and launch application normally: 
+* Run a mysql db in a docker container and launch application normally: 
     * docker run --name=mysql-local -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_food -e MYSQL_USER=springUser -e MYSQL_PASSWORD=springPwd --restart on-failure -d mysql/mysql-server:8.0
 * Run both db and application in separate docker containers:
     * [Create docker network]: docker network create food-mysql

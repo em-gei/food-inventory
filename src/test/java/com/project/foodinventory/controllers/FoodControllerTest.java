@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -94,9 +95,25 @@ public class FoodControllerTest {
 	}
 
 	@Test
-	public void testFoodSaveWithoutNameDoNothing() throws Exception {
+	public void testFoodSaveWithNameNullDoNothing() throws Exception {
 		Mockito.spy(foodService);
 		Food food = new Food();
+
+		ModelAndView modelAndView = mvc.perform(post("/food")
+				.flashAttr("food", food)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andReturn().getModelAndView();
+
+		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food/new");
+		Mockito.verify(foodService, Mockito.never()).save(Mockito.any());
+	}
+
+	@Test
+	public void testFoodSaveWithNameEmptyDoNothing() throws Exception {
+		Mockito.spy(foodService);
+		Food food = new Food();
+		food.setName("");
 
 		ModelAndView modelAndView = mvc.perform(post("/food")
 				.flashAttr("food", food)
@@ -123,7 +140,25 @@ public class FoodControllerTest {
 		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food");
 		Mockito.verify(foodService).save(Mockito.any());
 	}
-	
+
+	@Test
+	public void testShouldEditFoodWhenServiceFindIt() throws Exception{
+		Food existingFood = new Food(1, "test");
+		Mockito.when(foodService.findById(Mockito.anyLong())).thenReturn(existingFood);
+
+		Food updatedFood = new Food(1, "editedName");
+
+		ModelAndView modelAndView = mvc.perform(post("/food")
+				.flashAttr("food", updatedFood)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andReturn().getModelAndView();
+
+		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/food");
+		Mockito.verify(foodService).save(Mockito.any());
+		Assert.assertEquals("editedName", foodService.findById(1).getName());
+	}
+
 	@Test
 	public void testShouldDeleteFood() throws Exception {
 		Mockito.spy(foodService);

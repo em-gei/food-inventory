@@ -6,6 +6,7 @@ import com.project.foodinventory.models.Meal;
 import com.project.foodinventory.services.FoodMealService;
 import com.project.foodinventory.services.FoodService;
 import com.project.foodinventory.services.MealService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -148,6 +149,24 @@ public class MealControllerTest {
 
         ModelAndViewAssert.assertViewName(modelAndView, "redirect:/meal");
         Mockito.verify(mealService).save(Mockito.any());
+    }
+
+    @Test
+    public void testShouldEditMealWhenServiceFindIt() throws Exception{
+        Meal existingMeal = new Meal(1, "test");
+        Mockito.when(mealService.findById(Mockito.anyLong())).thenReturn(existingMeal);
+
+        Meal updatedMeal = new Meal(1, "editedDescription");
+
+        ModelAndView modelAndView = mvc.perform(post("/meal")
+                .flashAttr("meal", updatedMeal)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getModelAndView();
+
+        ModelAndViewAssert.assertViewName(modelAndView, "redirect:/meal");
+        Mockito.verify(mealService).save(Mockito.any());
+        Assert.assertEquals("editedDescription", mealService.findById(1).getDescription() );
     }
 
     @Test

@@ -166,7 +166,7 @@ public class MealControllerTest {
 
         ModelAndViewAssert.assertViewName(modelAndView, "redirect:/meal");
         Mockito.verify(mealService).save(Mockito.any());
-        Assert.assertEquals(mealService.findById(1).getDescription(), "editedDescription");
+        Assert.assertEquals("editedDescription", mealService.findById(1).getDescription() );
     }
 
     @Test

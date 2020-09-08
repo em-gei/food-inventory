@@ -22,6 +22,6 @@ cache:
     - $HOME/.sonar/cache
 
 script:
-  - mvn -f pom.xml clean verify -Pdocker,mutation-testing,jacoco
-  - mvn -f pom.xml verify -Pdocker,e2e-tests
-  - mvn -f pom.xml sonar:sonar coveralls:report
+  - mvn -f foodinventory-app/pom.xml clean verify -Pdocker,mutation-testing,jacoco
+  - mvn -f foodinventory-app/pom.xml verify -Pdocker,e2e-tests
+  - mvn -f foodinventory-app/pom.xml sonar:sonar coveralls:report

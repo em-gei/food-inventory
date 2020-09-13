@@ -1,11 +1,13 @@
-package com.project.foodinventory.services;
+package com.project.foodinventory.test.services;
 
 import com.project.foodinventory.models.Food;
 import com.project.foodinventory.models.FoodMeal;
 import com.project.foodinventory.models.Meal;
 import com.project.foodinventory.repositories.MealRepository;
+import com.project.foodinventory.services.MealService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -71,7 +73,12 @@ public class MealServiceTest {
 
     @Test
     public void testSaveMeal() {
-        Meal meal = new Meal(1, "test");
+        Mockito.spy(repository);
+        ArgumentCaptor<Meal> argument = ArgumentCaptor.forClass(Meal.class);
+
+        Meal meal = new Meal();
+        meal.setId(1);
+        meal.setDescription("mealTest");
         FoodMeal foodMeal = new FoodMeal(2, new Food(1, "foodTest"), meal);
         meal.setFoodList(Arrays.asList(foodMeal));
         Mockito.when(repository.save(Mockito.any(Meal.class))).thenReturn(meal);
@@ -81,6 +88,10 @@ public class MealServiceTest {
         assertEquals(meal, saved);
         assertNotNull(saved.getFoodList());
         assertFalse(saved.getFoodList().isEmpty());
+        assertNotNull(saved.getFoodList().get(0).getId());
+
+        Mockito.verify(repository).save(argument.capture());
+        assertEquals(meal, argument.getValue());
     }
 
     @Test

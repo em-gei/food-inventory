@@ -1,5 +1,6 @@
-package com.project.foodinventory.controllers;
+package com.project.foodinventory.test.controllers;
 
+import com.project.foodinventory.controllers.MealController;
 import com.project.foodinventory.dtos.MealDTO;
 import com.project.foodinventory.models.Food;
 import com.project.foodinventory.models.FoodMeal;

@@ -1,4 +1,4 @@
-package com.project.foodinventory.services;
+package com.project.foodinventory.test.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -12,8 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.project.foodinventory.services.FoodService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -74,12 +76,19 @@ public class FoodServiceTest {
 	
 	@Test
 	public void testSaveFood() {
-		Food food = new Food(1, "test");
+		Mockito.spy(repository);
+		ArgumentCaptor<Food> argument = ArgumentCaptor.forClass(Food.class);
+
+		Food food = new Food();
+		food.setId(1);
+		food.setName("test");
 		Mockito.when(repository.save(Mockito.any(Food.class))).thenReturn(food);
 		
 		Food saved = foodService.save(food);
 		
-		assertEquals(food, saved);		
+		assertEquals(food, saved);
+		Mockito.verify(repository).save(argument.capture());
+		assertEquals(food, argument.getValue());
 	}
 	
 	@Test

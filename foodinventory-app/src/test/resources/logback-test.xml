@@ -8,6 +8,8 @@
     <logger name="org.apache.http" level="WARN" />
 
     <!-- Enable debugging for our classes -->
-    <logger name="com.examples" level="debug" />
+    <logger name="com.project.foodinventory" level="debug" />
+
+    <logger name="com.gargoylesoftware" level="error" />
 
 </configuration>

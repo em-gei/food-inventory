@@ -1,5 +1,7 @@
 package com.project.foodinventory.services;
 
+import com.project.foodinventory.models.Food;
+import com.project.foodinventory.models.FoodMeal;
 import com.project.foodinventory.models.Meal;
 import com.project.foodinventory.repositories.MealRepository;
 import org.junit.Test;
@@ -70,11 +72,15 @@ public class MealServiceTest {
     @Test
     public void testSaveMeal() {
         Meal meal = new Meal(1, "test");
+        FoodMeal foodMeal = new FoodMeal(2, new Food(1, "foodTest"), meal);
+        meal.setFoodList(Arrays.asList(foodMeal));
         Mockito.when(repository.save(Mockito.any(Meal.class))).thenReturn(meal);
 
         Meal saved = mealService.save(meal);
 
         assertEquals(meal, saved);
+        assertNotNull(saved.getFoodList());
+        assertFalse(saved.getFoodList().isEmpty());
     }
 
     @Test

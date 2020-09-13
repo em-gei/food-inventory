@@ -31,10 +31,6 @@ public class FoodMeal {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public Food getFood() {
         return food;
     }

@@ -86,6 +86,7 @@ public class FoodMealServiceTest {
         FoodMeal saved = service.save(foodMeal);
 
         assertEquals(foodMeal, saved);
+        assertTrue(foodMeal.getId() > 0);
     }
 
     @Test

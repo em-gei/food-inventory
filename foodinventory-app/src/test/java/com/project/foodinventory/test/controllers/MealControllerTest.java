@@ -1,7 +1,9 @@
-package com.project.foodinventory.controllers;
+package com.project.foodinventory.test.controllers;
 
+import com.project.foodinventory.controllers.MealController;
 import com.project.foodinventory.dtos.MealDTO;
 import com.project.foodinventory.models.Food;
+import com.project.foodinventory.models.FoodMeal;
 import com.project.foodinventory.models.Meal;
 import com.project.foodinventory.services.FoodMealService;
 import com.project.foodinventory.services.FoodService;
@@ -9,6 +11,7 @@ import com.project.foodinventory.services.MealService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,14 +21,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,6 +56,50 @@ public class MealControllerTest {
     @Value("${mealDTO.key}")
     private String mealDTOKey;
 
+    @Autowired
+    private MealController mealController;
+
+    @Test
+    public void shouldGetMealPageName() {
+        String mealPage = mealController.getMealPage(new Model() {
+            @Override
+            public Model addAttribute(String s, Object o) {
+                return null;
+            }
+
+            @Override
+            public Model addAttribute(Object o) {
+                return null;
+            }
+
+            @Override
+            public Model addAllAttributes(Collection<?> collection) {
+                return null;
+            }
+
+            @Override
+            public Model addAllAttributes(Map<String, ?> map) {
+                return null;
+            }
+
+            @Override
+            public Model mergeAttributes(Map<String, ?> map) {
+                return null;
+            }
+
+            @Override
+            public boolean containsAttribute(String s) {
+                return false;
+            }
+
+            @Override
+            public Map<String, Object> asMap() {
+                return null;
+            }
+        });
+        Assert.assertEquals("meal", mealPage);
+    }
+
     @Test
     public void testMealPageExists() throws Exception {
         mvc.perform(get("/meal")).andExpect(status().is2xxSuccessful());
@@ -67,7 +113,7 @@ public class MealControllerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testMealPageEmptyContent() throws Exception {
-        Mockito.when(mealService.findAll()).thenReturn(Collections.EMPTY_LIST);
+        when(mealService.findAll()).thenReturn(Collections.EMPTY_LIST);
         List<Meal> mealList = (List<Meal>) mvc.perform(get("/meal")).andReturn().getModelAndView().getModel()
                 .get(mealContentKey);
         assertEquals(0, mealList.size());
@@ -76,7 +122,7 @@ public class MealControllerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testMealPageWithContent() throws Exception {
-        Mockito.when(mealService.findAll()).thenReturn(Arrays.asList(new Meal(1, "mealTest1"), new Meal(2, "mealTest2")));
+        when(mealService.findAll()).thenReturn(Arrays.asList(new Meal(1, "mealTest1"), new Meal(2, "mealTest2")));
         List<Meal> mealList = (List<Meal>) mvc.perform(get("/meal")).andReturn().getModelAndView().getModel()
                 .get(mealContentKey);
         assertEquals(2, mealList.size());
@@ -93,7 +139,7 @@ public class MealControllerTest {
 
     @Test
     public void testShouldReturnEditMealPage() throws Exception {
-        Mockito.when(mealService.findById(1)).thenReturn(new Meal(1, "mealTest"));
+        when(mealService.findById(1)).thenReturn(new Meal(1, "mealTest"));
 
         ModelAndView modelAndView = mvc.perform(get("/meal/edit/1")).andReturn().getModelAndView();
         Meal editingMeal = (Meal) modelAndView.getModel().get(mealKey);
@@ -154,7 +200,7 @@ public class MealControllerTest {
     @Test
     public void testShouldEditMealWhenServiceFindIt() throws Exception{
         Meal existingMeal = new Meal(1, "test");
-        Mockito.when(mealService.findById(Mockito.anyLong())).thenReturn(existingMeal);
+        when(mealService.findById(Mockito.anyLong())).thenReturn(existingMeal);
 
         Meal updatedMeal = new Meal(1, "editedDescription");
 
@@ -180,14 +226,15 @@ public class MealControllerTest {
 
     @Test
     public void testShouldReturnLinkMealPage() throws Exception {
-        Mockito.when(mealService.findById(1)).thenReturn(new Meal(1, "mealTest"));
-        Mockito.when(foodService.findAll()).thenReturn(Arrays.asList(new Food(1, "foodToAdd")));
+        when(mealService.findById(1)).thenReturn(new Meal(1, "mealTest"));
+        when(foodService.findAll()).thenReturn(Arrays.asList(new Food(1, "foodToAdd")));
 
         ModelAndView modelAndView = mvc.perform(get("/meal/link/1")).andReturn().getModelAndView();
         MealDTO editingMeal = (MealDTO) modelAndView.getModel().get(mealDTOKey);
 
         ModelAndViewAssert.assertViewName(modelAndView, "meal-link");
         assertNotNull(editingMeal);
+        assertEquals(foodService.findAll(), editingMeal.getAllFoods());
         assertEquals(1, editingMeal.getMeal().getId());
         assertEquals("mealTest", editingMeal.getMeal().getDescription());
     }
@@ -203,14 +250,16 @@ public class MealControllerTest {
     @Test
     public void testShouldAddLinkedFood() throws Exception {
         Mockito.spy(foodMealService);
+        ArgumentCaptor<FoodMeal> argument = ArgumentCaptor.forClass(FoodMeal.class);
 
         MealDTO mealDTO = new MealDTO();
         Food foodToAdd = new Food(1, "foodToAdd");
         Meal meal = new Meal(1, "mealTest");
         mealDTO.setFoodToAdd(foodToAdd);
+        mealDTO.setMeal(meal);
 
-        Mockito.when(mealService.findById(Mockito.anyLong())).thenReturn(meal);
-        Mockito.when(foodService.findById(foodToAdd.getId())).thenReturn(foodToAdd);
+        when(mealService.findById(Mockito.anyLong())).thenReturn(meal);
+        when(foodService.findById(foodToAdd.getId())).thenReturn(foodToAdd);
 
         ModelAndView modelAndView = mvc.perform(post("/meal/1/add/food")
                 .flashAttr("mealDTO", mealDTO)
@@ -219,7 +268,9 @@ public class MealControllerTest {
                 .andReturn().getModelAndView();
 
         ModelAndViewAssert.assertViewName(modelAndView, "redirect:/meal");
-        Mockito.verify(foodMealService).save(Mockito.any());
+        Mockito.verify(foodMealService).save(argument.capture());
+        assertEquals(foodToAdd, argument.getValue().getFood());
+        assertEquals(meal, argument.getValue().getMeal());
     }
 
     @Test

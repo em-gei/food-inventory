@@ -27,12 +27,12 @@ public class FoodMeal {
         this.meal = meal;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public Food getFood() {

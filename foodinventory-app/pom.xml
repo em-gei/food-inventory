@@ -81,7 +81,7 @@
                             <param>com.project.foodinventory.*</param>
                         </targetClasses>
                         <targetTests>
-                            <param>com.project.foodinventory.*</param>
+                            <param>com.project.foodinventory.test.*</param>
                         </targetTests>
                         <mutators>
                             <mutator>DEFAULTS</mutator>

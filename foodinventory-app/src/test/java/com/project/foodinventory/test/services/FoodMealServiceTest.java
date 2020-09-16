@@ -57,13 +57,14 @@ public class FoodMealServiceTest {
     public void testFindByIdExistingItem() {
         Meal meal = new Meal(1, "meal1");
         Food food = new Food(1, "food1");
-        FoodMeal foodMeal = new FoodMeal(1, food, meal);
+        long foodMealId = 1;
+        FoodMeal foodMeal = new FoodMeal(foodMealId, food, meal);
         Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(foodMeal));
 
         FoodMeal findById = service.findById(1);
 
         assertNotNull(findById);
-        assertEquals(foodMeal.getId(), findById.getId());
+        assertEquals(foodMealId, findById.getId());
         assertEquals(foodMeal.getFood().getName(), findById.getFood().getName());
         assertEquals(foodMeal.getMeal().getDescription(), findById.getMeal().getDescription());
     }

@@ -88,7 +88,6 @@ public class MealServiceTest {
         assertEquals(meal, saved);
         assertNotNull(saved.getFoodList());
         assertFalse(saved.getFoodList().isEmpty());
-        assertNotNull(saved.getFoodList().get(0).getId());
 
         Mockito.verify(repository).save(argument.capture());
         assertEquals(meal, argument.getValue());

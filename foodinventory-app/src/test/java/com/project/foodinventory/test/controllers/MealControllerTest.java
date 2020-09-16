@@ -21,11 +21,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -56,6 +55,50 @@ public class MealControllerTest {
 
     @Value("${mealDTO.key}")
     private String mealDTOKey;
+
+    @Autowired
+    private MealController mealController;
+
+    @Test
+    public void shouldGetMealPageName() {
+        String mealPage = mealController.getMealPage(new Model() {
+            @Override
+            public Model addAttribute(String s, Object o) {
+                return null;
+            }
+
+            @Override
+            public Model addAttribute(Object o) {
+                return null;
+            }
+
+            @Override
+            public Model addAllAttributes(Collection<?> collection) {
+                return null;
+            }
+
+            @Override
+            public Model addAllAttributes(Map<String, ?> map) {
+                return null;
+            }
+
+            @Override
+            public Model mergeAttributes(Map<String, ?> map) {
+                return null;
+            }
+
+            @Override
+            public boolean containsAttribute(String s) {
+                return false;
+            }
+
+            @Override
+            public Map<String, Object> asMap() {
+                return null;
+            }
+        });
+        Assert.assertEquals("meal", mealPage);
+    }
 
     @Test
     public void testMealPageExists() throws Exception {

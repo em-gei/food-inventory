@@ -7,9 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.project.foodinventory.controllers.FoodController;
 import org.junit.Assert;
@@ -24,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.foodinventory.models.Food;
@@ -44,6 +43,50 @@ public class FoodControllerTest {
 
     @Value("${food.key}")
     private String foodKey;
+
+    @Autowired
+    private FoodController foodController;
+
+    @Test
+    public void shouldGetFoodPageName() {
+        String foodPage = foodController.getFoodPage(new Model() {
+            @Override
+            public Model addAttribute(String s, Object o) {
+                return null;
+            }
+
+            @Override
+            public Model addAttribute(Object o) {
+                return null;
+            }
+
+            @Override
+            public Model addAllAttributes(Collection<?> collection) {
+                return null;
+            }
+
+            @Override
+            public Model addAllAttributes(Map<String, ?> map) {
+                return null;
+            }
+
+            @Override
+            public Model mergeAttributes(Map<String, ?> map) {
+                return null;
+            }
+
+            @Override
+            public boolean containsAttribute(String s) {
+                return false;
+            }
+
+            @Override
+            public Map<String, Object> asMap() {
+                return null;
+            }
+        });
+        Assert.assertEquals("food", foodPage);
+    }
 
     @Test
     public void testFoodPageShouldReturn200() throws Exception {
